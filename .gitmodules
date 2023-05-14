@@ -1,0 +1,6 @@
+[submodule "src/px4_msgs"]
+	path = src/px4_msgs
+	url = https://github.com/PX4/px4_msgs.git
+[submodule "src/sensitivity_framework"]
+	path = src/sensitivity_framework
+	url = https://gitlab.inria.fr/asrour/sensitivity_exp.git
