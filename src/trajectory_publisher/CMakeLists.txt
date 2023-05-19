@@ -29,7 +29,6 @@ find_package(sensor_msgs REQUIRED)
 #################
 # Setup targets #
 #################
-
 include_directories(include)
 
 add_executable(trajectory_publisher src/trajectory_publisher.cpp)

@@ -7,6 +7,9 @@
 
 #include <chrono>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
@@ -138,6 +141,37 @@ int main(int argc, char* argv[]) {
 	std::cout << "Starting trajectory_publisher node..." << std::endl;
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
+
+	std::vector<std::vector<std::string>> content;
+	std::vector<std::string> row;
+	std::string line, word;
+	std::fstream traj_file ("..csv_file/drone_data.csv", ios::in);
+	if(traj_file.is_open())
+	{
+		while(std::getline(traj_file, line))
+		{
+			row.clear();
+ 
+			std::stringstream str(line);
+ 
+			while(std::getline(str, word, ','))
+				row.push_back(word);
+
+			content.push_back(row);
+		}
+	}
+	else
+		std::cout<<"Could not open the file\n";
+ 
+	for(int i=0;i<content.size();i++)
+	{
+		for(int j=0;j<content[i].size();j++)
+		{
+			std::cout<<content[i][j]<<" ";
+		}
+		std::cout<<"\n";
+	}
+
 	rclcpp::spin(std::make_shared<TrajPub>());
 
 	rclcpp::shutdown();
