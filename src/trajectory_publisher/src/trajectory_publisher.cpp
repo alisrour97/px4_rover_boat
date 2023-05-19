@@ -3,6 +3,7 @@
 #include <px4_msgs/msg/vehicle_command.hpp>
 #include <px4_msgs/msg/vehicle_control_mode.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <Eigen/Eigen>
 #include <stdint.h>
 
 #include <chrono>
@@ -142,10 +143,13 @@ int main(int argc, char* argv[]) {
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
 
+	Eigen::VectorXf traj_time, des_yaw, des_yaw_rate;
+	Eigen::Matrix<float, Eigen::Dynamic, 3> des_pos, des_vel, des_acc;
+
 	std::vector<std::vector<std::string>> content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream traj_file ("..csv_file/drone_data.csv", ios::in);
+	std::fstream traj_file ("csv_file/drone_data.csv", std::ios::in);
 	if(traj_file.is_open())
 	{
 		while(std::getline(traj_file, line))
@@ -163,13 +167,24 @@ int main(int argc, char* argv[]) {
 	else
 		std::cout<<"Could not open the file\n";
  
-	for(int i=0;i<content.size();i++)
+	// Avoid the first row of titles
+	for(int i=1; i < int( content.size() ) ;i++)
 	{
-		for(int j=0;j<content[i].size();j++)
-		{
-			std::cout<<content[i][j]<<" ";
-		}
-		std::cout<<"\n";
+		traj_time.resize(i);
+		des_pos.conservativeResize(des_pos.rows()+1, des_pos.cols());
+		// des_vel.resize(i);
+		// des_acc.resize(i);
+		// des_yaw.resize(i);
+		// des_yaw_rate.resize(i);
+
+		traj_time(i-1) = (float)std::atof(content[i][0].c_str());
+		des_pos.row(i-1) << (float)std::atof(content[i][1].c_str()), (float)std::atof(content[i][2].c_str()), (float)std::atof(content[i][3].c_str());
+		// des_vel(i-1) = (float)std::atof(content[i][1].c_str());
+		// des_acc(i-1) = (float)std::atof(content[i][1].c_str());
+		// des_yaw(i-1) = (float)std::atof(content[i][1].c_str());
+
+		std::cout << des_pos.row(i-1) << std::endl;
+		
 	}
 
 	rclcpp::spin(std::make_shared<TrajPub>());

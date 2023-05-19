@@ -30,11 +30,13 @@ find_package(sensor_msgs REQUIRED)
 # Setup targets #
 #################
 include_directories(include)
+include_directories(csv_file)
 
 add_executable(trajectory_publisher src/trajectory_publisher.cpp)
 ament_target_dependencies(trajectory_publisher
   rclcpp
   px4_msgs
+  Eigen3
 )
 install(TARGETS trajectory_publisher
 DESTINATION lib/${PROJECT_NAME})
