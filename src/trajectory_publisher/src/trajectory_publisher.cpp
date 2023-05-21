@@ -1,77 +1,27 @@
-#include <px4_msgs/msg/offboard_control_mode.hpp>
-#include <px4_msgs/msg/trajectory_setpoint.hpp>
-#include <px4_msgs/msg/vehicle_command.hpp>
-#include <px4_msgs/msg/vehicle_control_mode.hpp>
-#include <rclcpp/rclcpp.hpp>
-#include <Eigen/Eigen>
-#include <stdint.h>
+#include "trajectory_publisher/trajectory_publisher.hpp"
 
-#include <chrono>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
+TrajectoryPublisher::TrajectoryPublisher() : Node("trajectory_publisher") {
 
-using namespace std::chrono;
-using namespace std::chrono_literals;
-using namespace px4_msgs::msg;
+	offboard_control_mode_publisher_ = this->create_publisher<OffboardControlMode>("/fmu/in/offboard_control_mode", 0);
+	trajectory_setpoint_publisher_ = this->create_publisher<TrajectorySetpoint>("/fmu/in/trajectory_setpoint", 0);
+	vehicle_command_publisher_ = this->create_publisher<VehicleCommand>("/fmu/in/vehicle_command", 0);
 
-class TrajPub : public rclcpp::Node {
-public:
-	TrajPub() : Node("trajectory_publisher") {
+	takeoff_altitude_ = -2.0;
+	takeoff_yaw_ = 1.57;
 
-		offboard_control_mode_publisher_ = this->create_publisher<OffboardControlMode>("/fmu/in/offboard_control_mode", 0);
-		trajectory_setpoint_publisher_ = this->create_publisher<TrajectorySetpoint>("/fmu/in/trajectory_setpoint", 0);
-		vehicle_command_publisher_ = this->create_publisher<VehicleCommand>("/fmu/in/vehicle_command", 0);
+	offboard_setpoint_counter_ = 0;
+	traj_cnt_ = 0;
 
-		offboard_setpoint_counter_ = 0;
+	load_trajectory();
 
-		auto timer_callback = [this]() -> void {
-
-			if (offboard_setpoint_counter_ == 10) {
-				// Change to Offboard mode after 10 setpoints
-				this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
-
-				// Arm the vehicle
-				this->arm();
-			}
-
-			// offboard_control_mode needs to be paired with trajectory_setpoint
-			publish_offboard_control_mode();
-			publish_trajectory_setpoint();
-
-			// stop the counter after reaching 11
-			if (offboard_setpoint_counter_ < 11) {
-				offboard_setpoint_counter_++;
-			}
-		};
-		timer_ = this->create_wall_timer(100ms, timer_callback);
-	}
-
-	void arm();
-	void disarm();
-
-private:
-	rclcpp::TimerBase::SharedPtr timer_;
-
-	rclcpp::Publisher<OffboardControlMode>::SharedPtr offboard_control_mode_publisher_;
-	rclcpp::Publisher<TrajectorySetpoint>::SharedPtr trajectory_setpoint_publisher_;
-	rclcpp::Publisher<VehicleCommand>::SharedPtr vehicle_command_publisher_;
-
-	std::atomic<uint64_t> timestamp_;   //!< common synced timestamped
-
-	uint64_t offboard_setpoint_counter_;   //!< counter for the number of setpoints sent
-
-	void publish_offboard_control_mode();
-	void publish_trajectory_setpoint();
-	void publish_vehicle_command(uint16_t command, float param1 = 0.0, float param2 = 0.0);
-};
+	publisher();
+}
 
 
 /**
  * @brief Send a command to Arm the vehicle
  */
-void TrajPub::arm(){
+void TrajectoryPublisher::arm(){
 	publish_vehicle_command(VehicleCommand::VEHICLE_CMD_COMPONENT_ARM_DISARM, 1.0);
 
 	RCLCPP_INFO(this->get_logger(), "Arm command send");
@@ -80,7 +30,7 @@ void TrajPub::arm(){
 /**
  * @brief Send a command to Disarm the vehicle
  */
-void TrajPub::disarm(){
+void TrajectoryPublisher::disarm(){
 	publish_vehicle_command(VehicleCommand::VEHICLE_CMD_COMPONENT_ARM_DISARM, 0.0);
 
 	RCLCPP_INFO(this->get_logger(), "Disarm command send");
@@ -90,7 +40,7 @@ void TrajPub::disarm(){
  * @brief Publish the offboard control mode.
  *        We will send position, velocity and acceleration
  */
-void TrajPub::publish_offboard_control_mode(){
+void TrajectoryPublisher::publish_offboard_control_mode(){
 	OffboardControlMode msg{};
 	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 	msg.position = true;
@@ -102,17 +52,12 @@ void TrajPub::publish_offboard_control_mode(){
 	offboard_control_mode_publisher_->publish(msg);
 }
 
-
-/**
- * @brief Publish a trajectory setpoint
- *        For this example, it sends a trajectory setpoint to make the
- *        vehicle hover at 5 meters with a yaw angle of 180 degrees.
- */
-void TrajPub::publish_trajectory_setpoint(){
+void TrajectoryPublisher::takeoff(){
 	TrajectorySetpoint msg{};
-	msg.position = {0.0, 0.0, -5.0};
-	msg.yaw = -3.14; // [-PI:PI]
+	msg.position = {0.0, 0.0, takeoff_altitude_};
+	msg.yaw = takeoff_yaw_; // [-PI:PI]
 	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+
 	trajectory_setpoint_publisher_->publish(msg);
 }
 
@@ -122,7 +67,7 @@ void TrajPub::publish_trajectory_setpoint(){
  * @param param1    Command parameter 1
  * @param param2    Command parameter 2
  */
-void TrajPub::publish_vehicle_command(uint16_t command, float param1,
+void TrajectoryPublisher::publish_vehicle_command(uint16_t command, float param1,
 					      float param2){
 	VehicleCommand msg{};
 	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
@@ -138,18 +83,13 @@ void TrajPub::publish_vehicle_command(uint16_t command, float param1,
 	vehicle_command_publisher_->publish(msg);
 }
 
-int main(int argc, char* argv[]) {
-	std::cout << "Starting trajectory_publisher node..." << std::endl;
-	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
-	rclcpp::init(argc, argv);
+void TrajectoryPublisher::load_trajectory(){
 
-	Eigen::VectorXf traj_time, des_yaw, des_yaw_rate;
-	Eigen::Matrix<float, Eigen::Dynamic, 3> des_pos, des_vel, des_acc;
-
+	
 	std::vector<std::vector<std::string>> content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream traj_file ("csv_file/drone_data.csv", std::ios::in);
+	std::fstream traj_file ("src/trajectory_publisher/csv_file/drone_data.csv", std::ios::in);
 	if(traj_file.is_open())
 	{
 		while(std::getline(traj_file, line))
@@ -163,31 +103,83 @@ int main(int argc, char* argv[]) {
 
 			content.push_back(row);
 		}
+
+		trajectory_setpoints_ = content.size();
+
+		// Avoid the first row of titles
+		for(int i=1; i < trajectory_setpoints_ ;i++)
+		{
+			traj_time_.conservativeResize(traj_time_.size()+1);
+			des_pos_.conservativeResize(des_pos_.rows()+1, des_pos_.cols());
+			des_vel_.conservativeResize(des_vel_.rows()+1, des_vel_.cols());
+			des_acc_.conservativeResize(des_acc_.rows()+1, des_acc_.cols());
+			des_yaw_.conservativeResize(des_yaw_.size()+1);
+			des_yaw_rate_.conservativeResize(des_yaw_rate_.size()+1);
+
+			traj_time_(i-1) = (float)std::atof(content[i][0].c_str());
+			des_pos_.row(i-1) << (float)std::atof(content[i][1].c_str()), (float)std::atof(content[i][2].c_str()), (float)std::atof(content[i][3].c_str());
+			des_yaw_(i-1) = (float)std::atof(content[i][4].c_str());
+			des_vel_.row(i-1) << (float)std::atof(content[i][5].c_str()), (float)std::atof(content[i][6].c_str()), (float)std::atof(content[i][7].c_str());
+			des_yaw_rate_(i-1) = (float)std::atof(content[i][8].c_str());
+			des_acc_.row(i-1) << (float)std::atof(content[i][9].c_str()), (float)std::atof(content[i][10].c_str()), (float)std::atof(content[i][11].c_str());
+			
+			// std::cout << traj_time(i-1) << ") " << des_pos.row(i-1) << " " << des_yaw(i-1) << " " << des_vel.row(i-1) << std::endl;
+		}
 	}
-	else
+	else{
 		std::cout<<"Could not open the file\n";
- 
-	// Avoid the first row of titles
-	for(int i=1; i < int( content.size() ) ;i++)
-	{
-		traj_time.resize(i);
-		des_pos.conservativeResize(des_pos.rows()+1, des_pos.cols());
-		// des_vel.resize(i);
-		// des_acc.resize(i);
-		// des_yaw.resize(i);
-		// des_yaw_rate.resize(i);
-
-		traj_time(i-1) = (float)std::atof(content[i][0].c_str());
-		des_pos.row(i-1) << (float)std::atof(content[i][1].c_str()), (float)std::atof(content[i][2].c_str()), (float)std::atof(content[i][3].c_str());
-		// des_vel(i-1) = (float)std::atof(content[i][1].c_str());
-		// des_acc(i-1) = (float)std::atof(content[i][1].c_str());
-		// des_yaw(i-1) = (float)std::atof(content[i][1].c_str());
-
-		std::cout << des_pos.row(i-1) << std::endl;
-		
+		exit(0);
 	}
 
-	rclcpp::spin(std::make_shared<TrajPub>());
+}
+
+void TrajectoryPublisher::publisher(){
+
+	auto timer_callback = [this]() -> void {
+
+		if (offboard_setpoint_counter_ == 10) {
+			// Change to Offboard mode after 10 setpoints
+			this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
+
+			// Arm the vehicle
+			this->arm();
+		}
+		else if (offboard_setpoint_counter_ >= 300){
+
+			if (traj_cnt_ < trajectory_setpoints_){
+
+				traj_sp_.position = {des_pos_(traj_cnt_,0), des_pos_(traj_cnt_,1), des_pos_(traj_cnt_,2) + takeoff_altitude_};
+				traj_sp_.velocity = {des_vel_(traj_cnt_,0), des_vel_(traj_cnt_,1), des_vel_(traj_cnt_,2)};
+				traj_sp_.acceleration = {des_acc_(traj_cnt_,0), des_acc_(traj_cnt_,1), des_acc_(traj_cnt_,2)};
+				traj_sp_.yaw = des_yaw_(traj_cnt_) + takeoff_yaw_;
+				traj_sp_.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+
+				publish_offboard_control_mode();
+				trajectory_setpoint_publisher_->publish(traj_sp_);
+
+				traj_cnt_++;
+
+			}
+		}
+		
+		// stop the counter after reaching 11
+		if (offboard_setpoint_counter_ < 301) {
+			offboard_setpoint_counter_++;
+
+			this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
+			publish_offboard_control_mode();
+			this->takeoff();
+		}
+	};
+	timer_ = this->create_wall_timer(100ms, timer_callback);
+}
+
+int main(int argc, char* argv[]) {
+	std::cout << "Starting trajectory_publisher node..." << std::endl;
+	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
+	rclcpp::init(argc, argv);
+
+	rclcpp::spin(std::make_shared<TrajectoryPublisher>());
 
 	rclcpp::shutdown();
 	return 0;
