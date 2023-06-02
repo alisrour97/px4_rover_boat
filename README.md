@@ -22,7 +22,7 @@ sudo usermod -aG docker $USER
 ### 2) Clone this repository
 Open a terminal, go in the folder where you want to clone this repository and run the command
 ```
-git clone git@gitlab.inria.fr:smarcell/sensitivity_experiment.git --recursive
+git clone https://gitlab.inria.fr/smarcell/sensitivity_experiment.git --recursive
 ```
 
 ### 3) Clone PX4 firmware
