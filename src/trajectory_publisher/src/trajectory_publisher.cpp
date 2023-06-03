@@ -89,7 +89,7 @@ void TrajectoryPublisher::load_trajectory(){
 	std::vector<std::vector<std::string>> content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream traj_file ("src/trajectory_publisher/csv_file/drone_data.csv", std::ios::in);
+	std::fstream traj_file ("src/trajectory_publisher/csv_file/drone_data4.csv", std::ios::in);
 	if(traj_file.is_open())
 	{
 		while(std::getline(traj_file, line))
@@ -146,7 +146,7 @@ void TrajectoryPublisher::publisher(){
 		}
 		else if (offboard_setpoint_counter_ >= 300){
 
-			if (traj_cnt_ < trajectory_setpoints_){
+			if (traj_cnt_ < trajectory_setpoints_-1){
 
 				traj_sp_.position = {des_pos_(traj_cnt_,0), des_pos_(traj_cnt_,1), des_pos_(traj_cnt_,2) + takeoff_altitude_};
 				traj_sp_.velocity = {des_vel_(traj_cnt_,0), des_vel_(traj_cnt_,1), des_vel_(traj_cnt_,2)};
@@ -171,7 +171,7 @@ void TrajectoryPublisher::publisher(){
 			this->takeoff();
 		}
 	};
-	timer_ = this->create_wall_timer(100ms, timer_callback);
+	timer_ = this->create_wall_timer(20ms, timer_callback); // 50 Hz
 }
 
 int main(int argc, char* argv[]) {
