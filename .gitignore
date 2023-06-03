@@ -2,4 +2,4 @@ gazebo_models/
 build/
 install/
 log/
-
+*.code-workspace
