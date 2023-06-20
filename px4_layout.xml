@@ -1,38 +1,41 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
- <tabbed_widget name="Main Window" parent="main_window">
-  <Tab tab_name="Position" containers="1">
+ <tabbed_widget parent="main_window" name="Main Window">
+  <Tab containers="1" tab_name="Position">
    <Container>
     <DockSplitter orientation="-" count="1" sizes="1">
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Trajectory">
-       <plot flip_x="false" mode="XYPlot" flip_y="false" style="Lines">
-        <range right="0.024637" left="-0.075411" top="0.052984" bottom="-0.064428"/>
+       <plot mode="XYPlot" style="Lines" flip_x="false" flip_y="false">
+        <range right="0.189665" top="2.443513" left="-5.490664" bottom="-3.987664"/>
         <limitY/>
-        <curve curve_x="vehicle_local_position/x" name="drone" color="#454955" curve_y="vehicle_local_position/y"/>
-        <curve curve_x="vehicle_local_position_setpoint/x" name="ref" color="#e1120f" curve_y="vehicle_local_position_setpoint/y"/>
+        <curve curve_x="vehicle_local_position/x" name="drone" curve_y="vehicle_local_position/y" color="#454955"/>
+        <curve curve_x="vehicle_local_position_setpoint/x" name="ref" curve_y="vehicle_local_position_setpoint/y" color="#e1120f"/>
        </plot>
       </DockArea>
-      <DockSplitter orientation="-" count="3" sizes="0.333333;0.333333;0.333333">
+      <DockSplitter orientation="-" count="3" sizes="0.332957;0.334086;0.332957">
        <DockArea name="x">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.024229" bottom="-0.058717"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.189665" left="0.320000" bottom="-5.490664"/>
          <limitY/>
          <curve name="vehicle_local_position/x" color="#cd281c"/>
+         <curve name="vehicle_local_position_setpoint/x" color="#1ac938"/>
         </plot>
        </DockArea>
        <DockArea name="y">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.019869" bottom="-0.023830"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.084440" left="0.320000" bottom="-1.628592"/>
          <limitY/>
          <curve name="vehicle_local_position/y" color="#11b110"/>
+         <curve name="vehicle_local_position_setpoint/y" color="#ff7f0e"/>
         </plot>
        </DockArea>
        <DockArea name="z">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.023141" bottom="-0.107028"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="1.217552" left="0.320000" bottom="-2.116649"/>
          <limitY/>
          <curve name="vehicle_local_position/z" color="#171ec0"/>
+         <curve name="vehicle_local_position_setpoint/z" color="#f14cc1"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -40,21 +43,21 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="Vel &amp;&amp; Acc" containers="1">
+  <Tab containers="1" tab_name="Vel &amp;&amp; Acc">
    <Container>
-    <DockSplitter orientation="-" count="3" sizes="0.333333;0.333333;0.333333">
+    <DockSplitter orientation="-" count="3" sizes="0.332957;0.334086;0.332957">
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Vx">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-        <range right="20.400000" left="0.000000" top="0.048773" bottom="-0.192034"/>
+       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+        <range right="199.784000" top="0.439071" left="0.320000" bottom="-0.507772"/>
         <limitY/>
         <curve name="vx" color="#e02929"/>
         <curve name="vx_des" color="#51dd24"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-        <range right="20.400000" left="0.000000" top="0.496883" bottom="-0.552431"/>
+       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+        <range right="199.784000" top="4.069194" left="0.320000" bottom="-2.312246"/>
         <limitY/>
         <curve name="vehicle_local_position/ax" color="#1f77b4"/>
         <curve name="ax_des" color="#ff7f0e"/>
@@ -63,16 +66,16 @@
      </DockSplitter>
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Vy">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-        <range right="20.400000" left="0.000000" top="0.028298" bottom="-0.137927"/>
+       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+        <range right="199.784000" top="0.138144" left="0.320000" bottom="-0.198399"/>
         <limitY/>
         <curve name="vy" color="#e02929"/>
         <curve name="vy_des" color="#51dd24"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-        <range right="20.400000" left="0.000000" top="0.359974" bottom="-0.425162"/>
+       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+        <range right="199.784000" top="8.774359" left="0.320000" bottom="-4.448089"/>
         <limitY/>
         <curve name="vehicle_local_position/ay" color="#d62728"/>
         <curve name="ay_des" color="#f14cc1"/>
@@ -81,16 +84,16 @@
      </DockSplitter>
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Vz">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-        <range right="20.400000" left="0.000000" top="2.263516" bottom="-1.435443"/>
+       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+        <range right="199.784000" top="2.188972" left="0.320000" bottom="-2.042659"/>
         <limitY/>
         <curve name="vz" color="#e02929"/>
         <curve name="vz_des" color="#51dd24"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-        <range right="20.400000" left="0.000000" top="102.624206" bottom="-7.592427"/>
+       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+        <range right="199.784000" top="103.461013" left="0.320000" bottom="-41.901515"/>
         <limitY/>
         <curve name="vehicle_local_position/az" color="#1ac938"/>
         <curve name="az_des" color="#9467bd"/>
@@ -100,56 +103,56 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="Attitude &amp;&amp; Rate" containers="1">
+  <Tab containers="1" tab_name="Attitude &amp;&amp; Rate">
    <Container>
     <DockSplitter orientation="-" count="1" sizes="1">
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
-      <DockSplitter orientation="-" count="3" sizes="0.333333;0.333333;0.333333">
+      <DockSplitter orientation="-" count="3" sizes="0.35;0.35;0.3">
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.045812" bottom="-0.050551"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.011864" left="0.320000" bottom="-0.021328"/>
          <limitY/>
          <curve name="roll" color="#f14cc1"/>
          <curve name="roll_des" color="#9467bd"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.024998" bottom="-0.033688"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.013700" left="0.320000" bottom="-0.035944"/>
          <limitY/>
          <curve name="pitch" color="#17becf"/>
          <curve name="pitch_des" color="#bcbd22"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="1.645644" bottom="1.612374"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="1.681370" left="0.320000" bottom="0.266379"/>
          <limitY/>
          <curve name="yaw" color="#1f77b4"/>
          <curve name="yaw_des" color="#d62728"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter orientation="-" count="3" sizes="0.333333;0.333333;0.333333">
+      <DockSplitter orientation="-" count="3" sizes="0.35;0.35;0.3">
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.243139" bottom="-0.488701"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.366196" left="0.320000" bottom="-0.115557"/>
          <limitY/>
          <curve name="w_roll" color="#1ac938"/>
          <curve name="w_roll_des" color="#ff7f0e"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.248768" bottom="-0.318141"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.205613" left="0.320000" bottom="-0.380351"/>
          <limitY/>
          <curve name="w_pitch" color="#f14cc1"/>
          <curve name="w_pitch_des" color="#9467bd"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-         <range right="20.400000" left="0.000000" top="0.049820" bottom="-0.007222"/>
+        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+         <range right="199.784000" top="0.079551" left="0.320000" bottom="-0.184682"/>
          <limitY/>
          <curve name="w_yaw" color="#17becf"/>
          <curve name="w_yaw_des" color="#bcbd22"/>
@@ -160,12 +163,12 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="Inputs" containers="1">
+  <Tab containers="1" tab_name="Inputs">
    <Container>
     <DockSplitter orientation="-" count="1" sizes="1">
      <DockArea name="...">
-      <plot flip_x="false" mode="TimeSeries" flip_y="false" style="Lines">
-       <range right="20.400000" left="0.000000" top="0.782939" bottom="-0.019096"/>
+      <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
+       <range right="199.784000" top="0.898569" left="0.320000" bottom="-0.021916"/>
        <limitY/>
        <curve name="actuator_motors/control.00" color="#17becf"/>
        <curve name="actuator_motors/control.01" color="#bcbd22"/>
@@ -176,7 +179,7 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="3"/>
+  <currentTabIndex index="0"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
@@ -217,17 +220,13 @@
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles>
-  <fileInfo prefix="" filename="../PX4-Autopilot/build/px4_sitl_default/rootfs/log/2023-06-12/08_29_36.ulg">
+  <fileInfo prefix="" filename="../PX4-Autopilot/build/px4_sitl_default/rootfs/log/2023-06-12/09_30_50.ulg">
    <selected_datasources value=""/>
+   <plugin ID="DataLoad ULog"/>
   </fileInfo>
  </previouslyLoaded_Datafiles>
  <!-- - - - - - - - - - - - - - - -->
  <customMathEquations>
-  <snippet name="az_des">
-   <global></global>
-   <function>return value</function>
-   <linked_source>vehicle_local_position_setpoint/acceleration.02</linked_source>
-  </snippet>
   <snippet name="ax_des">
    <global></global>
    <function>return value</function>
@@ -273,35 +272,69 @@
    <function>return value</function>
    <linked_source>vehicle_local_position/vz</linked_source>
   </snippet>
-  <snippet name="vx">
-   <global></global>
-   <function>return value</function>
-   <linked_source>vehicle_local_position/vx</linked_source>
-  </snippet>
-  <snippet name="vy_des">
-   <global></global>
-   <function>return value</function>
-   <linked_source>vehicle_local_position_setpoint/vy</linked_source>
-  </snippet>
   <snippet name="yaw">
    <global></global>
    <function>return value</function>
    <linked_source>vehicle_attitude_setpoint/yaw_body</linked_source>
   </snippet>
-  <snippet name="vx_des">
+  <snippet name="yaw_des">
    <global></global>
-   <function>return value</function>
-   <linked_source>vehicle_local_position_setpoint/vx</linked_source>
+   <function>w = value
+x = v1
+y = v2
+z = v3
+
+dcm10 = 2 * (x * y + w * z)
+dcm00 = w*w + x*x - y*y - z*z
+
+yaw = math.atan(dcm10, dcm00)
+
+return yaw</function>
+   <linked_source>vehicle_attitude/q.00</linked_source>
+   <additional_sources>
+    <v1>vehicle_attitude/q.01</v1>
+    <v2>vehicle_attitude/q.02</v2>
+    <v3>vehicle_attitude/q.03</v3>
+   </additional_sources>
   </snippet>
-  <snippet name="vz_des">
+  <snippet name="w_yaw_des">
    <global></global>
    <function>return value</function>
-   <linked_source>vehicle_local_position_setpoint/vz</linked_source>
+   <linked_source>vehicle_rates_setpoint/yaw</linked_source>
   </snippet>
-  <snippet name="pitch">
+  <snippet name="pitch_des">
+   <global></global>
+   <function>w = value
+x = v1
+y = v2
+z = v3
+
+dcm20 = 2 * (x * z - w * y)
+
+pitch = math.asin(-dcm20)
+
+return pitch</function>
+   <linked_source>vehicle_attitude/q.00</linked_source>
+   <additional_sources>
+    <v1>vehicle_attitude/q.01</v1>
+    <v2>vehicle_attitude/q.02</v2>
+    <v3>vehicle_attitude/q.03</v3>
+   </additional_sources>
+  </snippet>
+  <snippet name="w_roll_des">
    <global></global>
    <function>return value</function>
-   <linked_source>vehicle_attitude_setpoint/pitch_body</linked_source>
+   <linked_source>vehicle_rates_setpoint/roll</linked_source>
+  </snippet>
+  <snippet name="roll">
+   <global></global>
+   <function>return value</function>
+   <linked_source>vehicle_attitude_setpoint/roll_body</linked_source>
+  </snippet>
+  <snippet name="az_des">
+   <global></global>
+   <function>return value</function>
+   <linked_source>vehicle_local_position_setpoint/acceleration.02</linked_source>
   </snippet>
   <snippet name="roll_des">
    <global></global>
@@ -323,59 +356,30 @@ return roll</function>
     <v3>vehicle_attitude/q.03</v3>
    </additional_sources>
   </snippet>
-  <snippet name="w_roll_des">
+  <snippet name="pitch">
    <global></global>
    <function>return value</function>
-   <linked_source>vehicle_rates_setpoint/roll</linked_source>
+   <linked_source>vehicle_attitude_setpoint/pitch_body</linked_source>
   </snippet>
-  <snippet name="roll">
+  <snippet name="vz_des">
    <global></global>
    <function>return value</function>
-   <linked_source>vehicle_attitude_setpoint/roll_body</linked_source>
+   <linked_source>vehicle_local_position_setpoint/vz</linked_source>
   </snippet>
-  <snippet name="pitch_des">
-   <global></global>
-   <function>w = value
-x = v1
-y = v2
-z = v3
-
-dcm20 = 2 * (x * z - w * y)
-
-pitch = math.asin(-dcm20)
-
-return pitch</function>
-   <linked_source>vehicle_attitude/q.00</linked_source>
-   <additional_sources>
-    <v1>vehicle_attitude/q.01</v1>
-    <v2>vehicle_attitude/q.02</v2>
-    <v3>vehicle_attitude/q.03</v3>
-   </additional_sources>
-  </snippet>
-  <snippet name="w_yaw_des">
+  <snippet name="vx_des">
    <global></global>
    <function>return value</function>
-   <linked_source>vehicle_rates_setpoint/yaw</linked_source>
+   <linked_source>vehicle_local_position_setpoint/vx</linked_source>
   </snippet>
-  <snippet name="yaw_des">
+  <snippet name="vy_des">
    <global></global>
-   <function>w = value
-x = v1
-y = v2
-z = v3
-
-dcm10 = 2 * (x * y + w * z)
-dcm00 = w*w + x*x - y*y - z*z
-
-yaw = math.atan(dcm10, dcm00)
-
-return yaw</function>
-   <linked_source>vehicle_attitude/q.00</linked_source>
-   <additional_sources>
-    <v1>vehicle_attitude/q.01</v1>
-    <v2>vehicle_attitude/q.02</v2>
-    <v3>vehicle_attitude/q.03</v3>
-   </additional_sources>
+   <function>return value</function>
+   <linked_source>vehicle_local_position_setpoint/vy</linked_source>
+  </snippet>
+  <snippet name="vx">
+   <global></global>
+   <function>return value</function>
+   <linked_source>vehicle_local_position/vx</linked_source>
   </snippet>
  </customMathEquations>
  <snippets/>
