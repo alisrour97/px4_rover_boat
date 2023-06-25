@@ -26,9 +26,9 @@ git clone https://gitlab.inria.fr/smarcell/sensitivity_experiment.git --recursiv
 ```
 
 ### 3) Clone PX4 firmware
-Clone the firmware from the official repository, in the same folder where you cloned this repository
+Clone the firmware repository, in the same folder where you cloned this repository
 ```
-git clone https://github.com/PX4/PX4-Autopilot.git --recursive
+git clone https://github.com/alisrour97/PX4-Autopilot.git --recursive
 ```
 
 ### 4) Clone the uXRCE-DDS client 
