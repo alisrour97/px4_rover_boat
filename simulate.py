@@ -24,10 +24,10 @@ for i in range(args.n_iter) :
     
     start = subprocess.Popen("docker start px4_ros2",stdout=subprocess.PIPE,universal_newlines=True, shell=True)
 
-    gazebo = subprocess.Popen("gnome-terminal -- docker exec -u 0 -it px4_ros2 bash -c 'cd PX4-Autopilot; HEADLESS=1 make px4_sitl gazebo-classic'",
+    gazebo = subprocess.Popen("gnome-terminal -- docker exec -it px4_ros2 bash -c 'cd PX4-Autopilot; HEADLESS=1 make px4_sitl gazebo-classic'",
                               stdout=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf8', shell=True)
     time.sleep(gazebo_startup_time)
-    traj = subprocess.Popen("gnome-terminal -- docker exec -u 0 -it px4_ros2 bash -c 'cd sensitivity_experiment; source install/setup.bash; ros2 run trajectory_publisher trajectory_publisher'",
+    traj = subprocess.Popen("gnome-terminal -- docker exec -it px4_ros2 bash -c 'cd sensitivity_experiment; source install/setup.bash; ros2 run trajectory_publisher trajectory_publisher'",
                             stdout=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf8', shell=True)
 
     time.sleep(args.traj_length + takeoff_time + 10)
