@@ -6,7 +6,7 @@ TrajectoryPublisher::TrajectoryPublisher() : Node("trajectory_publisher") {
 	trajectory_setpoint_publisher_ = this->create_publisher<TrajectorySetpoint>("/fmu/in/trajectory_setpoint", 0);
 	vehicle_command_publisher_ = this->create_publisher<VehicleCommand>("/fmu/in/vehicle_command", 0);
 
-	takeoff_altitude_ = -2.0;
+	takeoff_altitude_ = -1.5;
 	takeoff_yaw_ = 1.57;
 
 	offboard_setpoint_counter_ = 0;
@@ -89,7 +89,7 @@ void TrajectoryPublisher::load_trajectory(){
 	std::vector<std::vector<std::string>> content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream traj_file ("src/trajectory_publisher/csv_file/drone_data4.csv", std::ios::in);
+	std::fstream traj_file ("src/trajectory_publisher/csv_file/drone_data_23_6_2023.csv", std::ios::in);
 	if(traj_file.is_open())
 	{
 		while(std::getline(traj_file, line))
@@ -144,14 +144,14 @@ void TrajectoryPublisher::publisher(){
 			// Arm the vehicle
 			this->arm();
 		}
-		else if (offboard_setpoint_counter_ >= 300){
+		else if (offboard_setpoint_counter_ >= 500){
 
 			if (traj_cnt_ < trajectory_setpoints_-1){
 
-				traj_sp_.position = {des_pos_(traj_cnt_,0), des_pos_(traj_cnt_,1), des_pos_(traj_cnt_,2) + takeoff_altitude_};
-				traj_sp_.velocity = {des_vel_(traj_cnt_,0), des_vel_(traj_cnt_,1), des_vel_(traj_cnt_,2)};
-				traj_sp_.acceleration = {des_acc_(traj_cnt_,0), des_acc_(traj_cnt_,1), des_acc_(traj_cnt_,2)};
-				traj_sp_.yaw = des_yaw_(traj_cnt_) + takeoff_yaw_;
+				traj_sp_.position = {des_pos_(traj_cnt_,0), -des_pos_(traj_cnt_,1), -des_pos_(traj_cnt_,2) };
+				traj_sp_.velocity = {des_vel_(traj_cnt_,0), -des_vel_(traj_cnt_,1), -des_vel_(traj_cnt_,2)};
+				traj_sp_.acceleration = {des_acc_(traj_cnt_,0), -des_acc_(traj_cnt_,1), -des_acc_(traj_cnt_,2)};
+				traj_sp_.yaw = -des_yaw_(traj_cnt_) + takeoff_yaw_;
 				traj_sp_.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 
 				publish_offboard_control_mode();
@@ -163,7 +163,7 @@ void TrajectoryPublisher::publisher(){
 		}
 		
 		// stop the counter after reaching 11
-		if (offboard_setpoint_counter_ < 301) {
+		if (offboard_setpoint_counter_ < 501) {
 			offboard_setpoint_counter_++;
 
 			this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);

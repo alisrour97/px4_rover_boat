@@ -1,41 +1,41 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
- <tabbed_widget parent="main_window" name="Main Window">
+ <tabbed_widget name="Main Window" parent="main_window">
   <Tab containers="1" tab_name="Position">
    <Container>
     <DockSplitter orientation="-" count="1" sizes="1">
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Trajectory">
-       <plot mode="XYPlot" style="Lines" flip_x="false" flip_y="false">
-        <range right="0.189665" top="2.443513" left="-5.490664" bottom="-3.987664"/>
+       <plot mode="XYPlot" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-2.179851" top="5.374712" left="-4.440025" right="2.474950"/>
         <limitY/>
-        <curve curve_x="vehicle_local_position/x" name="drone" curve_y="vehicle_local_position/y" color="#454955"/>
-        <curve curve_x="vehicle_local_position_setpoint/x" name="ref" curve_y="vehicle_local_position_setpoint/y" color="#e1120f"/>
+        <curve curve_x="vehicle_local_position/x" curve_y="vehicle_local_position/y" color="#454955" name="drone"/>
+        <curve curve_x="vehicle_local_position_setpoint/x" curve_y="vehicle_local_position_setpoint/y" color="#e1120f" name="ref"/>
        </plot>
       </DockArea>
-      <DockSplitter orientation="-" count="3" sizes="0.332957;0.334086;0.332957">
+      <DockSplitter orientation="-" count="3" sizes="0.332968;0.334064;0.332968">
        <DockArea name="x">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.189665" left="0.320000" bottom="-5.490664"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-2.050866" top="0.085792" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="vehicle_local_position/x" color="#cd281c"/>
-         <curve name="vehicle_local_position_setpoint/x" color="#1ac938"/>
+         <curve color="#cd281c" name="vehicle_local_position/x"/>
+         <curve color="#1ac938" name="vehicle_local_position_setpoint/x"/>
         </plot>
        </DockArea>
        <DockArea name="y">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.084440" left="0.320000" bottom="-1.628592"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-2.179851" top="5.374712" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="vehicle_local_position/y" color="#11b110"/>
-         <curve name="vehicle_local_position_setpoint/y" color="#ff7f0e"/>
+         <curve color="#11b110" name="vehicle_local_position/y"/>
+         <curve color="#ff7f0e" name="vehicle_local_position_setpoint/y"/>
         </plot>
        </DockArea>
        <DockArea name="z">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="1.217552" left="0.320000" bottom="-2.116649"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-2.054118" top="0.218844" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="vehicle_local_position/z" color="#171ec0"/>
-         <curve name="vehicle_local_position_setpoint/z" color="#f14cc1"/>
+         <curve color="#171ec0" name="vehicle_local_position/z"/>
+         <curve color="#f14cc1" name="vehicle_local_position_setpoint/z"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -45,58 +45,58 @@
   </Tab>
   <Tab containers="1" tab_name="Vel &amp;&amp; Acc">
    <Container>
-    <DockSplitter orientation="-" count="3" sizes="0.332957;0.334086;0.332957">
+    <DockSplitter orientation="-" count="3" sizes="0.35;0.35;0.3">
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Vx">
-       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-        <range right="199.784000" top="0.439071" left="0.320000" bottom="-0.507772"/>
+       <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-1.947023" top="0.965237" left="0.352000" right="65.672000"/>
         <limitY/>
-        <curve name="vx" color="#e02929"/>
-        <curve name="vx_des" color="#51dd24"/>
+        <curve color="#e02929" name="vx"/>
+        <curve color="#51dd24" name="vx_des"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-        <range right="199.784000" top="4.069194" left="0.320000" bottom="-2.312246"/>
+       <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-12.959754" top="14.435774" left="0.352000" right="65.672000"/>
         <limitY/>
-        <curve name="vehicle_local_position/ax" color="#1f77b4"/>
-        <curve name="ax_des" color="#ff7f0e"/>
+        <curve color="#1f77b4" name="vehicle_local_position/ax"/>
+        <curve color="#ff7f0e" name="ax_des"/>
        </plot>
       </DockArea>
      </DockSplitter>
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Vy">
-       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-        <range right="199.784000" top="0.138144" left="0.320000" bottom="-0.198399"/>
+       <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-1.886644" top="3.627599" left="0.352000" right="65.672000"/>
         <limitY/>
-        <curve name="vy" color="#e02929"/>
-        <curve name="vy_des" color="#51dd24"/>
+        <curve color="#e02929" name="vy"/>
+        <curve color="#51dd24" name="vy_des"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-        <range right="199.784000" top="8.774359" left="0.320000" bottom="-4.448089"/>
+       <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-12.426413" top="21.004850" left="0.352000" right="65.672000"/>
         <limitY/>
-        <curve name="vehicle_local_position/ay" color="#d62728"/>
-        <curve name="ay_des" color="#f14cc1"/>
+        <curve color="#d62728" name="vehicle_local_position/ay"/>
+        <curve color="#f14cc1" name="ay_des"/>
        </plot>
       </DockArea>
      </DockSplitter>
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockArea name="Vz">
-       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-        <range right="199.784000" top="2.188972" left="0.320000" bottom="-2.042659"/>
+       <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-2.174248" top="2.341104" left="0.352000" right="65.672000"/>
         <limitY/>
-        <curve name="vz" color="#e02929"/>
-        <curve name="vz_des" color="#51dd24"/>
+        <curve color="#e02929" name="vz"/>
+        <curve color="#51dd24" name="vz_des"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-        <range right="199.784000" top="103.461013" left="0.320000" bottom="-41.901515"/>
+       <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+        <range bottom="-53.898297" top="103.753617" left="0.352000" right="65.672000"/>
         <limitY/>
-        <curve name="vehicle_local_position/az" color="#1ac938"/>
-        <curve name="az_des" color="#9467bd"/>
+        <curve color="#1ac938" name="vehicle_local_position/az"/>
+        <curve color="#9467bd" name="az_des"/>
        </plot>
       </DockArea>
      </DockSplitter>
@@ -109,53 +109,53 @@
      <DockSplitter orientation="|" count="2" sizes="0.5;0.5">
       <DockSplitter orientation="-" count="3" sizes="0.35;0.35;0.3">
        <DockArea name="...">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.011864" left="0.320000" bottom="-0.021328"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-0.132600" top="0.306548" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="roll" color="#f14cc1"/>
-         <curve name="roll_des" color="#9467bd"/>
+         <curve color="#f14cc1" name="roll"/>
+         <curve color="#9467bd" name="roll_des"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.013700" left="0.320000" bottom="-0.035944"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-0.511593" top="0.276615" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="pitch" color="#17becf"/>
-         <curve name="pitch_des" color="#bcbd22"/>
+         <curve color="#17becf" name="pitch"/>
+         <curve color="#bcbd22" name="pitch_des"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="1.681370" left="0.320000" bottom="0.266379"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="1.295405" top="1.855430" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="yaw" color="#1f77b4"/>
-         <curve name="yaw_des" color="#d62728"/>
+         <curve color="#1f77b4" name="yaw"/>
+         <curve color="#d62728" name="yaw_des"/>
         </plot>
        </DockArea>
       </DockSplitter>
       <DockSplitter orientation="-" count="3" sizes="0.35;0.35;0.3">
        <DockArea name="...">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.366196" left="0.320000" bottom="-0.115557"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-1.212047" top="2.103108" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="w_roll" color="#1ac938"/>
-         <curve name="w_roll_des" color="#ff7f0e"/>
+         <curve color="#1ac938" name="w_roll"/>
+         <curve color="#ff7f0e" name="w_roll_des"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.205613" left="0.320000" bottom="-0.380351"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-1.823406" top="2.086970" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="w_pitch" color="#f14cc1"/>
-         <curve name="w_pitch_des" color="#9467bd"/>
+         <curve color="#f14cc1" name="w_pitch"/>
+         <curve color="#9467bd" name="w_pitch_des"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-         <range right="199.784000" top="0.079551" left="0.320000" bottom="-0.184682"/>
+        <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+         <range bottom="-0.596299" top="0.359941" left="0.352000" right="65.672000"/>
          <limitY/>
-         <curve name="w_yaw" color="#17becf"/>
-         <curve name="w_yaw_des" color="#bcbd22"/>
+         <curve color="#17becf" name="w_yaw"/>
+         <curve color="#bcbd22" name="w_yaw_des"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -167,13 +167,13 @@
    <Container>
     <DockSplitter orientation="-" count="1" sizes="1">
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines" flip_x="false" flip_y="false">
-       <range right="199.784000" top="0.898569" left="0.320000" bottom="-0.021916"/>
+      <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+       <range bottom="-0.021029" top="0.862199" left="0.352000" right="65.672000"/>
        <limitY/>
-       <curve name="actuator_motors/control.00" color="#17becf"/>
-       <curve name="actuator_motors/control.01" color="#bcbd22"/>
-       <curve name="actuator_motors/control.02" color="#1f77b4"/>
-       <curve name="actuator_motors/control.03" color="#d62728"/>
+       <curve color="#17becf" name="actuator_motors/control.00"/>
+       <curve color="#bcbd22" name="actuator_motors/control.01"/>
+       <curve color="#1f77b4" name="actuator_motors/control.02"/>
+       <curve color="#d62728" name="actuator_motors/control.03"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -186,7 +186,7 @@
  <!-- - - - - - - - - - - - - - - -->
  <Plugins>
   <plugin ID="DataLoad CSV">
-   <default time_axis="" delimiter="0"/>
+   <default delimiter="0" time_axis=""/>
   </plugin>
   <plugin ID="DataLoad MCAP"/>
   <plugin ID="DataLoad ROS bags">
@@ -220,7 +220,7 @@
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles>
-  <fileInfo prefix="" filename="../PX4-Autopilot/build/px4_sitl_default/rootfs/log/2023-06-12/09_30_50.ulg">
+  <fileInfo prefix="" filename="../PX4-Autopilot/build/px4_sitl_default/rootfs/log/2023-06-20/10_13_24.ulg">
    <selected_datasources value=""/>
    <plugin ID="DataLoad ULog"/>
   </fileInfo>
