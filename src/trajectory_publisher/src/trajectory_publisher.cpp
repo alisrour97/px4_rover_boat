@@ -1,16 +1,44 @@
 #include "trajectory_publisher/trajectory_publisher.hpp"
 
+inline Eigen::Matrix3f QuatToMat(Eigen::Vector4f Quat){
+    Eigen::Matrix3f Rot;
+    float s = Quat[0];
+    float x = Quat[1];
+    float y = Quat[2];
+    float z = Quat[3];
+    Rot << 1-2*(y*y+z*z),2*(x*y-s*z),2*(x*z+s*y),
+    2*(x*y+s*z),1-2*(x*x+z*z),2*(y*z-s*x),
+    2*(x*z-s*y),2*(y*z+s*x),1-2*(x*x+y*y);
+    return Rot;
+}
+
+
 TrajectoryPublisher::TrajectoryPublisher() : Node("trajectory_publisher") {
 
+	declare_parameter("file_name","drone_data.csv");
+
+	file_name_ = get_parameter("file_name").as_string();
+
+	std::cout << "Loaded " << file_name_ << std::endl;
+
+	rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
+	auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 0), qos_profile);
+
+	// Publishers
 	offboard_control_mode_publisher_ = this->create_publisher<OffboardControlMode>("/fmu/in/offboard_control_mode", 0);
 	trajectory_setpoint_publisher_ = this->create_publisher<TrajectorySetpoint>("/fmu/in/trajectory_setpoint", 0);
 	vehicle_command_publisher_ = this->create_publisher<VehicleCommand>("/fmu/in/vehicle_command", 0);
 
+	// Subscribers
+    odom_sub_ = this->create_subscription<px4_msgs::msg::VehicleOdometry>("/fmu/out/vehicle_odometry", qos,
+                    std::bind(&TrajectoryPublisher::odomFeedback, this, std::placeholders::_1));
+
 	takeoff_altitude_ = -1.5;
-	takeoff_yaw_ = 1.57;
 
 	offboard_setpoint_counter_ = 0;
 	traj_cnt_ = 0;
+
+	landed_ = false;
 
 	load_trajectory();
 
@@ -59,6 +87,17 @@ void TrajectoryPublisher::takeoff(){
 	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 
 	trajectory_setpoint_publisher_->publish(msg);
+
+}
+
+void TrajectoryPublisher::land(){
+	TrajectorySetpoint msg{};
+	msg.position = {0.0, 0.0, -1.0};
+	msg.yaw = yaw_; // [-PI:PI]
+	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+
+	trajectory_setpoint_publisher_->publish(msg);
+
 }
 
 /**
@@ -89,7 +128,8 @@ void TrajectoryPublisher::load_trajectory(){
 	std::vector<std::vector<std::string>> content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream traj_file ("src/trajectory_publisher/csv_file/drone_data_23_6_2023.csv", std::ios::in);
+	std::string file_name = "src/trajectory_publisher/csv_file/"+file_name_;
+	std::fstream traj_file (file_name, std::ios::in);
 	if(traj_file.is_open())
 	{
 		while(std::getline(traj_file, line))
@@ -116,12 +156,13 @@ void TrajectoryPublisher::load_trajectory(){
 			des_yaw_.conservativeResize(des_yaw_.size()+1);
 			des_yaw_rate_.conservativeResize(des_yaw_rate_.size()+1);
 
+			// The csv trajectory is in FLU and here is transformed in NED
 			traj_time_(i-1) = (float)std::atof(content[i][0].c_str());
-			des_pos_.row(i-1) << (float)std::atof(content[i][1].c_str()), (float)std::atof(content[i][2].c_str()), (float)std::atof(content[i][3].c_str());
-			des_yaw_(i-1) = (float)std::atof(content[i][4].c_str());
-			des_vel_.row(i-1) << (float)std::atof(content[i][5].c_str()), (float)std::atof(content[i][6].c_str()), (float)std::atof(content[i][7].c_str());
-			des_yaw_rate_(i-1) = (float)std::atof(content[i][8].c_str());
-			des_acc_.row(i-1) << (float)std::atof(content[i][9].c_str()), (float)std::atof(content[i][10].c_str()), (float)std::atof(content[i][11].c_str());
+			des_pos_.row(i-1) << (float)std::atof(content[i][1].c_str()), -(float)std::atof(content[i][2].c_str()), -(float)std::atof(content[i][3].c_str());
+			des_yaw_(i-1) = -(float)std::atof(content[i][4].c_str());
+			des_vel_.row(i-1) << (float)std::atof(content[i][5].c_str()), -(float)std::atof(content[i][6].c_str()), -(float)std::atof(content[i][7].c_str());
+			des_yaw_rate_(i-1) = -(float)std::atof(content[i][8].c_str());
+			des_acc_.row(i-1) << (float)std::atof(content[i][9].c_str()), -(float)std::atof(content[i][10].c_str()), -(float)std::atof(content[i][11].c_str());
 			
 			// std::cout << traj_time(i-1) << ") " << des_pos.row(i-1) << " " << des_yaw(i-1) << " " << des_vel.row(i-1) << std::endl;
 		}
@@ -143,15 +184,21 @@ void TrajectoryPublisher::publisher(){
 
 			// Arm the vehicle
 			this->arm();
+			takeoff_yaw_ = yaw_;
 		}
-		else if (offboard_setpoint_counter_ >= 500){
+		else{
+			
+			if(fabs(pos_(2)) < fabs(takeoff_altitude_) && traj_cnt_ < trajectory_setpoints_-1){
+				this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
+				publish_offboard_control_mode();
+				this->takeoff();
+			}
+			else if(traj_cnt_ < trajectory_setpoints_-1){
 
-			if (traj_cnt_ < trajectory_setpoints_-1){
-
-				traj_sp_.position = {des_pos_(traj_cnt_,0), -des_pos_(traj_cnt_,1), -des_pos_(traj_cnt_,2) };
-				traj_sp_.velocity = {des_vel_(traj_cnt_,0), -des_vel_(traj_cnt_,1), -des_vel_(traj_cnt_,2)};
-				traj_sp_.acceleration = {des_acc_(traj_cnt_,0), -des_acc_(traj_cnt_,1), -des_acc_(traj_cnt_,2)};
-				traj_sp_.yaw = -des_yaw_(traj_cnt_) + takeoff_yaw_;
+		+takeoff_altitude_		traj_sp_.position = {des_pos_(traj_cnt_,0), des_pos_(traj_cnt_,1), des_pos_(traj_cnt_,2)};
+				traj_sp_.velocity = {des_vel_(traj_cnt_,0), des_vel_(traj_cnt_,1), des_vel_(traj_cnt_,2)};
+				traj_sp_.acceleration = {des_acc_(traj_cnt_,0), des_acc_(traj_cnt_,1), des_acc_(traj_cnt_,2)};
+				traj_sp_.yaw = des_yaw_(traj_cnt_) + takeoff_yaw_;
 				traj_sp_.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 
 				publish_offboard_control_mode();
@@ -160,18 +207,45 @@ void TrajectoryPublisher::publisher(){
 				traj_cnt_++;
 
 			}
+			else{
+				if(!landed_){
+					// publish_offboard_control_mode();
+					// this->land();
+					publish_vehicle_command(VehicleCommand::VEHICLE_CMD_NAV_LAND);
+
+					RCLCPP_INFO(this->get_logger(), "Land command send");
+					landed_ = true;
+				}
+			}
 		}
 		
 		// stop the counter after reaching 11
-		if (offboard_setpoint_counter_ < 501) {
+		if (offboard_setpoint_counter_ < 11) {
 			offboard_setpoint_counter_++;
 
-			this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
-			publish_offboard_control_mode();
-			this->takeoff();
+		// 	this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
+		// 	publish_offboard_control_mode();
+		// 	this->takeoff();
 		}
 	};
 	timer_ = this->create_wall_timer(20ms, timer_callback); // 50 Hz
+}
+
+void TrajectoryPublisher::odomFeedback(px4_msgs::msg::VehicleOdometry::UniquePtr msg){
+    
+    pos_ << msg->position[0], msg->position[1], msg->position[2];
+    vel_ << msg->velocity[0], msg->velocity[1], msg->velocity[2];
+    
+	std::cout << "pos: " << pos_.transpose() << std::endl;
+
+    R_att_ =  QuatToMat( Eigen::Vector4f( msg->q[0], msg->q[1], msg->q[2], msg->q[3] ));
+    w_att_ << msg->angular_velocity[0], msg->angular_velocity[1], msg->angular_velocity[2];
+
+	yaw_ = atan2(R_att_(1,0),R_att_(0,0));
+
+    // pos_ = R_att_ * pos_;
+    // vel_ = R_att_ * vel_;
+   
 }
 
 int main(int argc, char* argv[]) {
