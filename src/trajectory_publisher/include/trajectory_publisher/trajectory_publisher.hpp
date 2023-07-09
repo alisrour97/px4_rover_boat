@@ -55,6 +55,7 @@ private:
 	float yaw_;
 
 	bool landed_;
+	bool takeoff_;
 
     int traj_cnt_, offboard_setpoint_counter_;
     TrajectorySetpoint traj_sp_{};

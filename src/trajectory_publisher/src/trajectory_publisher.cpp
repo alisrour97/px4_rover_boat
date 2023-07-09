@@ -39,6 +39,7 @@ TrajectoryPublisher::TrajectoryPublisher() : Node("trajectory_publisher") {
 	traj_cnt_ = 0;
 
 	landed_ = false;
+	takeoff_ = false;
 
 	load_trajectory();
 
@@ -188,14 +189,15 @@ void TrajectoryPublisher::publisher(){
 		}
 		else{
 			
-			if(fabs(pos_(2)) < fabs(takeoff_altitude_) && traj_cnt_ < trajectory_setpoints_-1){
+			if(fabs(pos_(2)) < fabs(takeoff_altitude_) && !takeoff_){
 				this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
 				publish_offboard_control_mode();
 				this->takeoff();
 			}
 			else if(traj_cnt_ < trajectory_setpoints_-1){
+				takeoff_ = true;
 
-		+takeoff_altitude_		traj_sp_.position = {des_pos_(traj_cnt_,0), des_pos_(traj_cnt_,1), des_pos_(traj_cnt_,2)};
+				traj_sp_.position = {des_pos_(traj_cnt_,0), des_pos_(traj_cnt_,1), des_pos_(traj_cnt_,2)};
 				traj_sp_.velocity = {des_vel_(traj_cnt_,0), des_vel_(traj_cnt_,1), des_vel_(traj_cnt_,2)};
 				traj_sp_.acceleration = {des_acc_(traj_cnt_,0), des_acc_(traj_cnt_,1), des_acc_(traj_cnt_,2)};
 				traj_sp_.yaw = des_yaw_(traj_cnt_) + takeoff_yaw_;
