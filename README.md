@@ -102,6 +102,32 @@ source install/setup.bash
 ros2 run trajectory_publisher trajectory_publisher
 ```
 
+### 4) Alternative way to run many perturbed simulations
+
+```
+cd sensitivity_experiment
+```
+A script to simulate a trajectory with 9 perturbed simulations
+
+```
+python3 -m simulate.py <trajectory_file_name> <trajectory_duration_in_seconds>
+
+```
+The log files are found when navigating to
+
+```
+cd ../PX4-Autopilot/build/px4_sitl_default/rootfs
+
+```
+
+Sometimes you have to run the following to get permission to plot logs in plotjuggler 
+
+```
+sudo chown -R tesla:tesla *
+
+```
+my username is tesla
+
 ## Authors
 Ali Srour <br>
 Salvatore Marcellini <br>
