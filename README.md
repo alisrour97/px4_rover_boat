@@ -107,12 +107,21 @@ ros2 run trajectory_publisher trajectory_publisher
 ```
 cd sensitivity_experiment
 ```
+
+
 A script to simulate a trajectory with 9 perturbed simulations
 
 ```
 python3 -m simulate.py <trajectory_file_name> <trajectory_duration_in_seconds>
 
 ```
+Make sure that you have permission to run simulate.py script by running
+
+```
+sudo chmod +x simulate.py
+
+```
+
 The log files are found when navigating to
 
 ```
