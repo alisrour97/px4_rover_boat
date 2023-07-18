@@ -26,10 +26,10 @@ for i in range(1,10):
     
     start = subprocess.Popen("docker start px4_ros2",stdout=subprocess.PIPE,universal_newlines=True, shell=True)
 
-    if(i == 1)
+    if(i == 1):
         gazebo = subprocess.Popen("gnome-terminal -- docker exec -u 0 -it px4_ros2 bash -c 'cd PX4-Autopilot; HEADLESS=1 make px4_sitl gazebo-classic'",
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf8', shell=True)
-    else
+    else:
         j = i - 1
         gazebo = subprocess.Popen("gnome-terminal -- docker exec -u 0 -it px4_ros2 bash -c 'cd PX4-Autopilot; HEADLESS=1 make px4_sitl gazebo-classic_iris_delta_p"+str(j)+"'",
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf8', shell=True)
