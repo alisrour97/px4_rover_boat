@@ -138,17 +138,74 @@ sudo chown -R tesla:tesla *
 my username is tesla
 
 ## Experiments Real Drone
+First you should be on the same wifi network as the drone WifiVicon, then you connect to the drone
+via ssh followed by username/id:
 
-## 1) Mavlink shell
-# start the micrortps client 
-# Stop Mavlink
+```
+ssh nvidia@192.168.30.165
+```
+Make sure that the drone is recognized by Qualysis/Vicon on the Mocap desktop
 
-## 2) On Jetson
-# start 3 containers
-# start the micrortps Agent
-# start visp odom node 
-# start the trajectory publisher node
+The the next step would be to open the Mavlink shell on the px4 to enable communication
 
+```
+python3 PX4-Autopilot/Tools/mavlink_shell.py
+
+```
+Then you type the following:
+
+```
+micrortps_client start -t UART
+```
+After that you can safely close that terminal
+
+on your laptop you need the following package as to run atomatic script:
+
+```
+sudo apt install sshpass
+```
+
+Automatic script start_Acanthis.sh:
+
+```
+./start_Acanthis.sh
+
+```
+which does the following: connect to drone/ starting docker/ changing the directory to sensitivity experiments
+and sourcing the "setup.bash" which is translated in the following commands:
+
+```
+ssh nvidia@192.168.30.165
+docker start sens_exp
+docker exec -u 0 -it sens_exp
+cd sens_ws/sensitivity_experiment
+source install/setup.bash
+
+```
+
+Then you can start the MicroRTPS Agent to publish and subscribe to the drone nodes
+
+```
+micrortps_agent -t UART
+
+```
+
+In another terminal you also do the following as to make visp node "visp_odom" publish to the drone the position
+
+```
+./start_Acanthis.sh
+ros2 run visp_odom visp_odom
+
+```
+
+Then in another terminal you can run the trajectory publisher with:
+
+
+```
+./start_Acanthis.sh
+ros2 run trajectory_publisher .........
+
+```
 
 
 ## Authors
