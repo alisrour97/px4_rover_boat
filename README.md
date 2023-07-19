@@ -139,11 +139,11 @@ my username is tesla
 
 ### 5) experiements
 
-## Mavlink shell
+## 1) Mavlink shell
 # start the micrortps client 
 # Stop Mavlink
 
-## Jetson
+## 2) On Jetson
 # start 3 containers
 # start the micrortps Agent
 # start visp odom node 
