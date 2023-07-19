@@ -137,6 +137,20 @@ sudo chown -R tesla:tesla *
 ```
 my username is tesla
 
+### 5) experiements
+
+## Mavlink shell
+# start the micrortps client 
+# Stop Mavlink
+
+## Jetson
+# start 3 containers
+# start the micrortps Agent
+# start visp odom node 
+# start the trajectory publisher node
+
+
+
 ## Authors
 Ali Srour <br>
 Salvatore Marcellini <br>
