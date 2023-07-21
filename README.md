@@ -207,6 +207,13 @@ ros2 run trajectory_publisher .........
 
 ```
 
+To transfer CSV files, do the following:
+
+```
+scp location_on_your_desktop/your_file.csv nvidia@nvidia@192.168.30.165:/sens_ws/sensitivity_experiment/src/trajectory_publisher/csv_file
+
+```
+
 
 ## Authors
 Ali Srour <br>
