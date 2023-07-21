@@ -214,10 +214,15 @@ scp directory_of_file/File.csv nvidia@192.168.30.165:~/sens_ws/sensitivity_exper
 
 ```
 
-To listen to vehicle odometry:
+To listen to vehicle different topics:
 
 ```
+ros2 topic list
 ros2 topic echo /fmu/vehicle_visual_odometry/in
+ros2 topic echo /fmu/vehicle_odometry/out
+ros2 topic echo /fmu/vehicle_control_mode/out
+ros2 topic echo /fmu/vehicle_status/out
+
 
 ```
 
