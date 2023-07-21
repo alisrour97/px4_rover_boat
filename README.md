@@ -156,6 +156,8 @@ Then you type the following:
 
 ```
 micrortps_client start -t UART
+mavlink stop-all
+
 ```
 After that you can safely close that terminal
 
@@ -233,6 +235,8 @@ colcon build --packages-select visp_odom --symlink-install
 colcon build --packages-select trajectory_publisher
 
 ```
+
+
 
 
 ## Authors
