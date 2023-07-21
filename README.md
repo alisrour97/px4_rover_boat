@@ -203,7 +203,7 @@ Then in another terminal you can run the trajectory publisher with:
 
 ```
 ./start_Acanthis.sh
-ros2 run trajectory_publisher .........
+ros2 run trajectory_publisher trajectory_publisher --ros-args -p file_name:="your_file.csv"
 
 ```
 
@@ -211,6 +211,21 @@ To transfer CSV files, do the following:
 
 ```
 scp directory_of_file/File.csv nvidia@192.168.30.165:~/sens_ws/sensitivity_experiment/src/trajectory_publisher/csv_file
+
+```
+
+To listen to vehicle odometry:
+
+```
+ros2 topic echo /fmu/vehicle_visual_odometry/in
+
+```
+
+If in case you changed visp_odom node or trajectory publisher you have to build it again by:
+
+```
+colcon build --packages-select visp_odom --symlink-install
+colcon build --packages-select trajectory_publisher
 
 ```
 
