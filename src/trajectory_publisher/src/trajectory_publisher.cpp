@@ -15,7 +15,7 @@ inline Eigen::Matrix3f QuatToMat(Eigen::Vector4f Quat){
 
 TrajectoryPublisher::TrajectoryPublisher() : Node("trajectory_publisher") {
 
-	declare_parameter("file_name","drone_data.csv");
+	declare_parameter("file_name","init_5s.csv");
 
 	file_name_ = get_parameter("file_name").as_string();
 
