@@ -104,7 +104,7 @@ ros2 run trajectory_publisher trajectory_publisher
 ```
 You should see IRIS moving with feedforward trajectory of duration 5 seconds
 
-![Alt text](images/gazebo_iris.png)
+![Alt text](image/gazebo_iris.png)
 
 
 
