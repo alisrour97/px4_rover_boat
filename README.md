@@ -29,7 +29,7 @@ git clone https://github.com/alisrour97/Sensitivity_PX4_Experiments.git --recurs
 ### 3) Clone PX4 firmware
 Clone the firmware repository, in the same folder where you cloned this repository
 ```
-git clone https://github.com/alisrour97/PX4-Autopilot.git --recursive
+git clone https://github.com/PX4/PX4-Autopilot.git --recursive
 ```
 
 ### 4) Clone the uXRCE-DDS client 
@@ -102,6 +102,11 @@ At the end of the building process, or if you already have built before, run the
 source install/setup.bash
 ros2 run trajectory_publisher trajectory_publisher
 ```
+You should see IRIS moving with feedforward trajectory of duration 5 seconds
+
+![Alt text](images/gazebo_iris.png)
+
+
 
 ### 4) Alternative way to run many perturbed simulations
 
