@@ -1,5 +1,6 @@
 ## Sensitivity experiment
-Trajectory planner based on sensitivity to let a drone pass through a window safely
+Trajectory planner Node in ROS2 to send trajectory "CSV file" to IRIS model in Gazebo step by step.
+Everything works inside a docker out of the box!!
 
 ## Getting started
 We advise to use Docker to run both PX4 and the offboard application.
@@ -44,7 +45,7 @@ make
 ### 5) Create the docker container
 Go into the sensitivity_experiment folder and run the script to create the container (N.B: you must be in the sensitivity_experiment folder)
 ```
-cd sensitivity_experiment
+cd Sensitivity_PX4_Experiments
 source create_px4_container.sh 
 ```
 Now you should be inside the container, and if you run the command ```ls```, you will see the two folders
@@ -93,7 +94,7 @@ Open a new terminal in the container and, only for the first time, build the ROS
 xhost +
 docker exec -u 0 -it px4_ros2 bash
 source ../../opt/ros/foxy/setup.bash
-cd sensitivity_experiment
+cd Sensitivity_PX4_Experiments
 colcon build
 ```
 At the end of the building process, or if you already have built before, run the commands
@@ -105,7 +106,7 @@ ros2 run trajectory_publisher trajectory_publisher
 ### 4) Alternative way to run many perturbed simulations
 
 ```
-cd sensitivity_experiment
+cd Sensitivity_PX4_Experiments
 ```
 
 
@@ -180,7 +181,7 @@ and sourcing the "setup.bash" which is translated in the following commands:
 ssh nvidia@192.168.30.165
 docker start sens_exp
 docker exec -u 0 -it sens_exp
-cd sens_ws/sensitivity_experiment
+cd sens_ws/Sensitivity_PX4_Experiments
 source install/setup.bash
 
 ```
