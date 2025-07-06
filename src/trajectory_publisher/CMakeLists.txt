@@ -38,8 +38,21 @@ ament_target_dependencies(trajectory_publisher
   px4_msgs
   Eigen3
 )
+
 install(TARGETS trajectory_publisher
 DESTINATION lib/${PROJECT_NAME})
+
+#New Rover Executable
+
+add_executable(rover_publisher src/rover_publisher.cpp)
+ament_target_dependencies(rover_publisher
+ rclcpp 
+ px4_msgs)
+install(TARGETS rover_publisher 
+DESTINATION lib/${PROJECT_NAME})
+
+
+
 
 ############
 # Install ##
