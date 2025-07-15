@@ -25,7 +25,7 @@ public:
         auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, qos_profile.depth), qos_profile);
 
         vehicle_status_sub_ = this->create_subscription<px4_msgs::msg::VehicleStatus>(
-            "/fmu/out/vehicle_status", qos,
+            "/fmu/out/vehicle_status_v1", qos,
             std::bind(&RoverManualControl::status_callback, this, _1));
 
         is_armed_ = false;
@@ -91,6 +91,7 @@ private:
         msg.acceleration = true;
         msg.attitude = false;
         msg.body_rate = false;
+        msg.thrust_and_torque = false;
         msg.direct_actuator = false;  // Enable actuator control if needed
 
         offboard_control_mode_pub_->publish(msg);
@@ -101,8 +102,8 @@ private:
     px4_msgs::msg::TrajectorySetpoint msg{};
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 
-    msg.position = {10.0, 10.0, 0.0};  // Go forward 1m in NED
-    msg.velocity = {1.0, 1.0, 0.0};
+    msg.position = {5.0, 5.0, 0.0};  // Go forward 1m in NED
+    msg.velocity = {2.0, 2.0, 0.0};
     msg.acceleration = {0.0, 0.0, 0.0};
     msg.jerk = {0.0, 0.0, 0.0};
     msg.yaw = 1.0;
