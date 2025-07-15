@@ -13,7 +13,7 @@ Open a terminal, go in the folder where you want to clone this repository and ru
 ```
 git clone https://github.com/alisrour97/px4_jet_ski.git --recursive
 ```
-The **--recursive** flag is required to fetch all of the PX4 submodules.
+The **--recursive** flag is required to fetch all of the PX4 messages or other submodules if any.
 
 
 ### 3) Clone PX4 firmware
@@ -21,16 +21,22 @@ Clone the firmware repository, in the same folder where you cloned this reposito
 ```
 git clone https://github.com/PX4/PX4-Autopilot.git --recursive
 ```
+The **--recursive** flag is required to fetch all of the PX4 submodules.
+
 
 ### 4) Clone the uXRCE-DDS client 
-This is the client needed to communicate with PX4 from ROS2.
+This is the client needed to communicate with PX4 from ROS2. choose a version between **V2.4.0** and **V2.4.2** which are the latest 
+stable versions supported
+
 ```
-git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
+git clone -b foxy https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
 cd Micro-XRCE-DDS-Agent
 mkdir build
 cd build
 cmake ..
 make
+sudo make install
+sudo ldconfig /usr/local/lib/
 ```
 
 
