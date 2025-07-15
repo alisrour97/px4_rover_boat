@@ -1,24 +1,12 @@
-## Sensitivity experiment
-Trajectory planner Node in ROS2 to send trajectory "CSV file" to IRIS model in Gazebo step by step.
-Everything works inside a docker out of the box!!
+## Jetski Simulations PX4
+This repo serves as prove of concept for guidance, navigation and control for jetskies powered by the PX4 autopilot in Gazebo.
 
 ## Getting started
-We advise to use Docker to run both PX4 and the offboard application.
+We advise to use Docker to run both PX4 and the offboard application. 
+One can refer to the following link for the details of docker installation
+[PX4 ROS2 Docker](https://github.com/alisrour97/px4-dev-simulation-ros2-humble.git)
 
-### 1) Install Docker
-There is a convinient script that facilitate everything
-```
-curl -fsSL get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-```
-We suggest to use docker as a non-root user, that way your build folder won't be owned by root after using docker. In a new terminal run
-```
-# Create docker group (may not be required)
-sudo groupadd docker
-# Add your user to the docker group.
-sudo usermod -aG docker $USER
-```
-**Now log out and in again before using docker!!**
+
 
 ### 2) Clone this repository
 Open a terminal, go in the folder where you want to clone this repository and run the command
