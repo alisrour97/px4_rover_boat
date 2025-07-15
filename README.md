@@ -81,8 +81,7 @@ Open a new terminal in the container and, only for the first time, build the ROS
 xhost +
 docker exec -u 0 -it px4_ros2 bash
 cd PX4_Experiments
-source /opt/ros/foxy/setup.bash
-source install/setup.bash
+source /opt/ros/humble/setup.bash
 colcon build
 ```
 
@@ -94,7 +93,7 @@ ros2 run trajectory_publisher rover_publisher
 ```
 You should see Rover Ackermann moving with toward specific position
 
-![Alt text](image/gazebo_iris.png)
+![Alt text](image/ackerman.png)
 
 
 
