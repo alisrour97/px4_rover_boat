@@ -91,7 +91,7 @@ At the end of the building process, or if you already have built before, run the
 source install/setup.bash
 ros2 run trajectory_publisher rover_publisher
 ```
-You should see Rover Ackermann moving with toward specific position
+You should see Rover Ackermann moving toward specific position
 
 ![Alt text](image/ackerman.png)
 
