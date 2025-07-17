@@ -1,5 +1,5 @@
 ## Jetski Simulations PX4
-This repo serves as prove of concept for guidance, navigation and control for jetskies powered by the PX4 autopilot in Gazebo.
+This repo serves as prove of concept for guidance, navigation and control for jetskies powered by the PX4 autopilot in ignition Gazebo.
 
 ## Getting started
 
@@ -116,6 +116,46 @@ my username is tesla
 
 
 ## Add jetski SDF
+
+To add **new** SDF model with ocean, one have to add them inside the PX4-Autopilot Firmware,
+specifically do
+
+```
+cd ../PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix
+```
+
+Then copy paste folder file **4022_gz_jet_ski** found in the **cad_px4_jet_ski** folder of this repo.
+
+Also, don't forget to add it to the CMakelist.txt in the same subdirectory.
+
+After that you can move towards the models in **gz** by
+
+```
+cd /PX4-Autopilot/Tools/simulation/gz/worlds
+```
+
+copy paste the **jet_ski.sdf** there which resembles the world of simulation
+
+After that add the **jet_ski** directory which contains your boat model configuration in the following folder at
+
+```
+cd /PX4-Autopilot/Tools/simulation/gz/models
+```
+
+and now you can call SITL by doing:
+
+```
+cd /home/user/PX4-Autopilot
+make px4_sitl gz_jet_ski
+```
+
+**NOTE** Still I am not able to parse correctly the model, it is work in progress
+
+**Permissions** if faced by permision issues inside docker then do:
+
+```
+sudo chown -R $(id -u):$(id -g) /home/user/PX4-Autopilot
+```
 
 
 
