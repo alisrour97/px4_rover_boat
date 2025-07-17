@@ -118,7 +118,7 @@ my username is tesla
 ## Add jetski SDF
 
 To add **new** SDF model with ocean, one have to add them inside the PX4-Autopilot Firmware,
-specifically do
+specifically change directory:
 
 ```
 cd ../PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix
@@ -126,9 +126,9 @@ cd ../PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix
 
 Then copy paste folder file **4022_gz_jet_ski** found in the **cad_px4_jet_ski** folder of this repo.
 
-Also, don't forget to add it to the CMakelist.txt in the same subdirectory.
+**NOTE** don't forget to add it to the CMakelist.txt in the same subdirectory.
 
-After that you can move towards the models in **gz** by
+Change to world directory:
 
 ```
 cd /PX4-Autopilot/Tools/simulation/gz/worlds
@@ -142,16 +142,16 @@ After that add the **jet_ski** directory which contains your boat model configur
 cd /PX4-Autopilot/Tools/simulation/gz/models
 ```
 
-and now you can call SITL by doing:
+From PX4 root directory:
 
 ```
 cd /home/user/PX4-Autopilot
 make px4_sitl gz_jet_ski
 ```
 
-**NOTE** Still I am not able to parse correctly the model, it is work in progress
+**MODEL** Still I am not able to parse correctly the model, it is work in progress
 
-**Permissions** if faced by permision issues inside docker then do:
+**Permissions** if faced by permision issues inside docker:
 
 ```
 sudo chown -R $(id -u):$(id -g) /home/user/PX4-Autopilot
