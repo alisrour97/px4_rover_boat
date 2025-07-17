@@ -1,5 +1,5 @@
-## Jetski Simulations PX4
-This repo serves as prove of concept for guidance, navigation and control for jetskies powered by the PX4 autopilot in ignition Gazebo.
+## Simulations PX4
+This repo serves as prove of concept for guidance, navigation and control for rover/jetskies powered by the PX4 autopilot in ignition Gazebo.
 
 ## Getting started
 
