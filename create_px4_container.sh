@@ -3,7 +3,7 @@ xhost +
 
 # Run docker and open bash shell
 docker run -it --privileged \
--u root \
+-e LOCAL_USER_ID=$(id -u) \
 --env "DISPLAY" \
 -v $(pwd)/../PX4-Autopilot/:/home/user/PX4-Autopilot/:rw \
 -v $(pwd)/../PX4_Experiments/:/home/user/PX4_Experiments/:rw \

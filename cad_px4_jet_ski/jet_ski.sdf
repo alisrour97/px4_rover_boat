@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+  <world name="jet_ski">
+      <!-- Ocean plugin instead of classic model://ocean -->
+    <physics name="ode_physics" type="ode">
+      <gravity>0 0 -9.81</gravity>
+      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <plugin
+        filename="ignition-gazebo-physics-system"
+        name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin
+        filename="ignition-gazebo-user-commands-system"
+        name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+    <plugin
+        filename="ignition-gazebo-scene-broadcaster-system"
+        name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    
+    <plugin
+	filename="ignition-gazebo-buoyancy-system"
+	name="ignition::gazebo::systems::Buoyancy">
+	  <uniform_fluid_density>997</uniform_fluid_density>
+	  <fluid_level>-0.3</fluid_level>   <!-- submerge more of your box -->
+	  <linear_drag>500</linear_drag>
+	  <angular_drag>200</angular_drag>
+	    <wavefield>
+	    <topic>/world/jet_ski/coast_water/wave/height</topic>
+	  </wavefield>
+    </plugin>
+    
+  
+    <model name="water_plane_collision">
+    <static>true</static>
+    <link name="link">
+      <pose>0 0 0 0 0 0</pose>     <!-- z=0 is your “fluid_level” -->
+      <collision name="water_collision">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>200 200</size>     <!-- big enough for your scene -->
+          </plane>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>    <!-- default ODE contact, so buoyancy sees it -->
+          </contact>
+        </surface>
+      </collision>
+      <!-- optional: visual for debugging -->
+      <!--
+      <visual name="water_debug">
+        <geometry>
+          <plane><normal>0 0 1</normal><size>200 200</size></plane>
+        </geometry>
+        <material>
+          <ambient>1 0 0 0.3</ambient>
+        </material>
+      </visual>
+      -->
+    </link>
+  </model>
+	
+
+    
+
+
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic"/>
+      <scene>
+        <grid>false</grid>
+        <ambient>0.2 0.2 0.2 1</ambient>
+        <background>0.53 0.7 0.93 1</background>
+        <shadows>true</shadows>
+      </scene>
+      <include>
+        <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Sky</uri>
+        <pose>0 0 0 0 0 0</pose>
+      </include>
+      <!-- add your ocean_surface here if you need it -->
+      <include>
+	<uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coast Water</uri>
+	<pose>0 0 0.0 0 0 0</pose>
+      </include>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>47.333439</latitude_deg>
+      <longitude_deg>8.547097</longitude_deg>
+      <elevation>0.0</elevation>
+    </spherical_coordinates>
+    <gui>
+      <camera name="user_camera">
+        <pose>10 0 5 0 0 -1.57</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+  </world>
+</sdf>
